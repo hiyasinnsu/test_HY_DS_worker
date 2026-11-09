@@ -5,7 +5,7 @@
 // `this.buttons`; the game routes taps through `hitTest`.
 
 import { COLORS, PLAYER } from './config.js';
-import { TAU, formatScore, easeOutCubic } from './util.js';
+import { TAU, formatScore } from './util.js';
 
 const FONT = 'system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif';
 // Japanese glyphs must fall back to the system font: ui-monospace has no kana
@@ -18,7 +18,6 @@ export class UI {
   constructor(game) {
     this.game = game;
     this.buttons = [];
-    this.flashMessage = '';
     this.flashTime = 0;
     this.toast = '';
     this.toastTime = 0;
@@ -26,9 +25,6 @@ export class UI {
     this.bossIntroText = '';
     this.bossIntroTime = 0;
     this.stageIntroTime = 0;
-    this.combo = 0;
-    this.comboTime = 0;
-    this.settingsOpen = false;
   }
 
   get w() {
@@ -59,10 +55,6 @@ export class UI {
     if (this.toastTime > 0) this.toastTime -= dt;
     if (this.bossIntroTime > 0) this.bossIntroTime -= dt;
     if (this.stageIntroTime > 0) this.stageIntroTime -= dt;
-    if (this.comboTime > 0) {
-      this.comboTime -= dt;
-      if (this.comboTime <= 0) this.combo = 0;
-    }
     this.layout();
   }
 

@@ -31,7 +31,6 @@ export class Input {
     this.down = new Set();
     this.pressed = new Set();
     this.pointerType = 'mouse';
-    this.hasTouch = false;
     this._activePointer = null;
     this._bound = [];
 
@@ -81,7 +80,6 @@ export class Input {
   }
 
   _onPointerDown(e) {
-    if (e.pointerType === 'touch') this.hasTouch = true;
     this.pointerType = e.pointerType || 'mouse';
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     // Ignore secondary fingers so a stray palm does not hijack the ship.

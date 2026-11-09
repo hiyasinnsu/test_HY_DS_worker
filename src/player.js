@@ -8,7 +8,6 @@
 
 import { PLAYER, COLORS } from './config.js';
 import { clamp, TAU, damp, angleTo } from './util.js';
-import { getSprite, PLAYER_SHOT_SPRITE } from './sprites.js';
 
 export class Player {
   constructor(game) {
@@ -33,14 +32,12 @@ export class Player {
     this.bombTimer = 0;
     this.bombActive = false;
     this.dead = false;
-    this.visible = true;
     this.tilt = 0;
     this.grazeFlash = 0;
     this.focus = false;
     this.moving = false;
     this.fireFlash = 0;
     this.thrust = 0;
-    this.shotSprite = getSprite(PLAYER_SHOT_SPRITE, COLORS.playerBullet, 5);
   }
 
   get hitRadius() {
@@ -67,7 +64,6 @@ export class Player {
     this.bombActive = false;
     this.bombTimer = 0;
     this.dead = false;
-    this.visible = true;
   }
 
   addPower(n = 1) {

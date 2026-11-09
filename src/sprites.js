@@ -7,13 +7,6 @@
 const CACHE = new Map();
 const SPRITE_PAD = 3;
 
-export const SPRITE_SIZE = {
-  orb: 9,
-  rice: 8,
-  big: 20,
-  tiny: 6,
-};
-
 export const PLAYER_SHOT_SPRITE = 'player-shot';
 
 function makeKey(kind, color, radius) {

@@ -21,7 +21,6 @@ export class Viewport {
     this.offsetY = 0;
     this.worldW = GAME_W;
     this.worldH = GAME_H_MIN;
-    this.wide = false;
     this._onResize = null;
   }
 
@@ -52,7 +51,6 @@ export class Viewport {
     this.scale = Math.min(cssW / this.worldW, cssH / this.worldH);
     this.offsetX = (cssW - this.worldW * this.scale) / 2;
     this.offsetY = (cssH - this.worldH * this.scale) / 2;
-    this.wide = cssW > cssH;
     this._onResize?.(this);
   }
 

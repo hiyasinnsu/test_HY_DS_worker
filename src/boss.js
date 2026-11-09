@@ -4,9 +4,8 @@
 // and timer. When HP or the timer runs out the boss clears the screen, drops
 // power items and moves on — so a player who is struggling is never hard-locked.
 
-import { TAU, rand, clamp, angleTo, lerp, easeOutCubic } from './util.js';
+import { TAU, rand, clamp, lerp } from './util.js';
 import * as P from './patterns.js';
-import { COLORS } from './config.js';
 
 const PHASES = [
   {
