@@ -186,6 +186,7 @@ export class Game {
         }
       }
       this.playerCollisions(dt);
+      this.adaptQuality(dtRaw);
     } else if (this.state === STATE.STAGE_CLEAR || this.state === STATE.GAMEOVER) {
       this.bullets.update(dt, this.worldW, this.worldH);
       this.enemies.update(dt);
@@ -194,6 +195,25 @@ export class Game {
 
     // Effects keep animating on every screen so the title has life.
     this.effects.update(dtRaw);
+  }
+
+  /**
+   * On phones the fill-rate is the bottleneck, not the logic. When the player
+   * has left quality on 'auto' and the frame rate stays under 45fps, drop the
+   * device-pixel-ratio cap once (never raise it back automatically: that would
+   * oscillate and make the whole game visibly shimmer).
+   */
+  adaptQuality(dt) {
+    if (this.settings.quality !== 'auto' || this._qualityDropped) return;
+    this._slowTime = (this._slowTime || 0) + dt;
+    if (this.fps < 45 && this._slowTime > 1.2) {
+      this._qualityDropped = true;
+      this.viewport.dprCap = 1.25;
+      this.viewport.measure();
+      this.ui.message('軽量化モード', 1.2);
+    } else if (this.fps >= 50) {
+      this._slowTime = 0;
+    }
   }
 
   updatePending(dt) {
@@ -233,8 +253,12 @@ export class Game {
       else if (ev.type === 'move') this.onPointerMove(ev);
       else if (ev.type === 'up') this.onPointerUp(ev);
       else if (ev.type === 'down2' && this.state === STATE.PLAYING) {
-        // Second finger during play = panic bomb (classic mobile shortcut).
-        this.useBomb();
+        // A second touch while dragging: honour a UI button if one is under the
+        // finger (pause), otherwise treat it as the classic panic-bomb shortcut.
+        const world = this.viewport.toWorld(ev.x, ev.y);
+        const button = this.ui.hitTest(world.x, world.y);
+        if (button) this.onButton(button.id);
+        else this.useBomb();
       }
     }
 
@@ -429,7 +453,10 @@ export class Game {
     this.stage = 1;
     this.stats = { graze: 0, kills: 0, hits: 0, bombs: 0 };
     this.player.reset();
-    // Auto-pick a sensible quality once, based on the first frame budget.
+    this._qualityDropped = false;
+    this._slowTime = 0;
+    this.viewport.dprCap = QUALITY_DPR[this.settings.quality] ?? 2;
+    this.viewport.measure();
     this.startStage(1);
   }
 

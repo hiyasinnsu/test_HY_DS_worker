@@ -1,12 +1,12 @@
 // Offline support for the installed (home-screen) experience.
 //
-// Strategy: the HTML shell is network-first so a deploy is picked up on the
-// next launch; static assets are stale-while-revalidate so play works offline
-// without ever pinning an old engine for long.
+// Every same-origin GET is network-first with a cache fallback. Network-first
+// is deliberate: a split cache (fresh HTML + stale JS) would break ES module
+// loading after a deploy, and the latency cost on a first paint is negligible
+// compared with the "game half-boots" failure mode.
 
-const VERSION = 'v1';
-const SHELL = `shell-${VERSION}`;
-const ASSETS = `assets-${VERSION}`;
+const VERSION = 'v2';
+const CACHE = `neon-barrage-${VERSION}`;
 
 const PRECACHE = [
   './',
@@ -40,10 +40,10 @@ const PRECACHE = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
-      .open(ASSETS)
+      .open(CACHE)
       .then((cache) => cache.addAll(PRECACHE))
-      .then(() => self.skipWaiting())
-      .catch(() => self.skipWaiting()),
+      .catch(() => undefined)
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -51,9 +51,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) =>
-        Promise.all(keys.filter((k) => k !== ASSETS && k !== SHELL).map((k) => caches.delete(k))),
-      )
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
 });
@@ -64,32 +62,23 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  const isDocument = req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html');
-  if (isDocument) {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(SHELL).then((c) => c.put(req, copy));
-          return res;
-        })
-        .catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html'))),
-    );
-    return;
-  }
-
   event.respondWith(
-    caches.match(req).then((hit) => {
-      const network = fetch(req)
-        .then((res) => {
-          if (res.ok) {
-            const copy = res.clone();
-            caches.open(ASSETS).then((c) => c.put(req, copy));
-          }
-          return res;
-        })
-        .catch(() => hit);
-      return hit || network;
-    }),
+    fetch(req)
+      .then((res) => {
+        if (res && res.ok && res.type === 'basic') {
+          const copy = res.clone();
+          caches.open(CACHE).then((cache) => cache.put(req, copy)).catch(() => undefined);
+        }
+        return res;
+      })
+      .catch(async () => {
+        const hit = await caches.match(req);
+        if (hit) return hit;
+        if (req.mode === 'navigate') {
+          const shell = await caches.match('./index.html');
+          if (shell) return shell;
+        }
+        return new Response('offline', { status: 503, statusText: 'offline' });
+      }),
   );
 });

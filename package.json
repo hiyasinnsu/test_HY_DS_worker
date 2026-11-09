@@ -6,10 +6,14 @@
   "type": "module",
   "scripts": {
     "serve": "node scripts/serve.mjs",
-    "test": "node tests/smoke.mjs",
-    "check": "node tests/static-check.mjs"
+    "test": "node tests/static-check.mjs && node tests/headless-sim.mjs && node tests/dom-boot.mjs",
+    "test:browser": "node tests/smoke.mjs",
+    "test:live": "node tests/live-check.mjs",
+    "shots": "node tests/render-shots.mjs"
   },
   "devDependencies": {
+    "@napi-rs/canvas": "^0.1.80",
+    "jsdom": "^25.0.1",
     "puppeteer-core": "^23.11.1"
   }
 }

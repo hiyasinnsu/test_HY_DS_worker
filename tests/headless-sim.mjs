@@ -339,6 +339,18 @@ async function main() {
   check('landscape keeps a sane playfield', game.worldH >= 720 && game.worldH <= 1180, `h=${game.worldH} scale=${game.viewport.scale.toFixed(3)}`);
   check('no NaN/out-of-bounds player after resize', Number.isFinite(game.player.x));
 
+  // Auto quality: sustained low fps must drop the DPR cap exactly once.
+  game.resume();
+  game.settings.quality = 'auto';
+  game._qualityDropped = false;
+  game.viewport.dprCap = 2;
+  game.fps = 30;
+  frames(game, 90);
+  check('auto quality drops the dpr cap under load', game.viewport.dprCap === 1.25, `dprCap=${game.viewport.dprCap}`);
+  game.fps = 10;
+  frames(game, 30);
+  check('auto quality only degrades once', game.viewport.dprCap === 1.25);
+
   // Heavy load CPU budget: 1200 bullets + particles.
   game.resume();
   for (let i = 0; i < 1200; i++) {

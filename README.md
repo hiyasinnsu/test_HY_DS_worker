@@ -51,10 +51,10 @@ node scripts/serve.mjs 8080   # http://localhost:8080/
 ## 検証
 
 ```bash
-node tests/headless-sim.mjs    # DOM/Canvas スタブ上の実ゲームを数千フレーム実行
-node tests/render-shots.mjs    # 実 Canvas 実装で PNG を書き出す（要 @napi-rs/canvas）
-node tests/smoke.mjs           # 実ブラウザ（Chrome/Edge + puppeteer-core）でのスモークテスト
-node tests/static-check.mjs    # HTML/CSS/JS の参照切れ・import 整合性チェック
+npm test                       # static-check + headless-sim + dom-boot（ブラウザ不要）
+npm run test:browser           # 実ブラウザ（Chrome/Edge + puppeteer-core）でのスモークテスト
+npm run test:live              # 公開中の GitHub Pages がローカル検証版と一致するか確認
+npm run shots                  # 実 Canvas 実装で PNG を書き出す（要 @napi-rs/canvas）
 ```
 
 `tests/headless-sim.mjs` は Canvas API をスタブ化しつつ、NaN 座標や存在しない描画メソッド呼び出しを例外にします。実ブラウザを起動できない環境でも、ロジックと描画呼び出しの破綻を検出できます。

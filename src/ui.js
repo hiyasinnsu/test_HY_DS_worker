@@ -8,7 +8,9 @@ import { COLORS, PLAYER } from './config.js';
 import { TAU, formatScore, easeOutCubic } from './util.js';
 
 const FONT = 'system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif';
-const MONO = 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+// Japanese glyphs must fall back to the system font: ui-monospace has no kana
+// coverage, and canvas does not always apply the browser's fallback list.
+const MONO = `ui-monospace, SFMono-Regular, Menlo, Consolas, "Hiragino Kaku Gothic ProN", "Noto Sans JP", monospace`;
 
 const btn = (id, x, y, w, h, label, kind = 'primary') => ({ id, x, y, w, h, label, kind });
 
@@ -103,8 +105,10 @@ export class UI {
       buttons.push(btn('toggleSens', x, y + 168, bw, 46, '操作の追従', 'toggle'));
       buttons.push(btn('closeSettings', cx - bw / 2, bottom - 8, bw, 50, 'もどる', 'primary'));
     } else if (state === 'playing') {
-      buttons.push(btn('pause', w - 46, 12, 38, 38, '||', 'icon'));
-      buttons.push(btn('bomb', 22, h - 92, 64, 64, 'BOMB', 'round'));
+      // 44px is the minimum comfortable touch target; scaled up by the world
+      // scale these two stay reachable with a thumb on a small phone.
+      buttons.push(btn('pause', w - 52, 10, 44, 44, '||', 'icon'));
+      buttons.push(btn('bomb', 20, h - 96, 68, 68, 'BOMB', 'round'));
     }
 
     this.buttons = buttons;
@@ -288,9 +292,9 @@ export class UI {
 
     ctx.save();
     ctx.textAlign = 'center';
-    ctx.font = `700 10px ${MONO}`;
-    ctx.fillStyle = 'rgba(255,180,200,0.85)';
-    ctx.fillText(boss.phase.name, w / 2, y - 12);
+    ctx.font = `700 12px ${FONT}`;
+    ctx.fillStyle = 'rgba(255,190,210,0.9)';
+    ctx.fillText(boss.phase.name, w / 2, y - 14);
 
     ctx.fillStyle = 'rgba(255,255,255,0.10)';
     ctx.fillRect(x, y, barW, 6);
@@ -349,18 +353,11 @@ export class UI {
     ctx.fillStyle = 'rgba(214,236,255,0.68)';
     ctx.fillText('DANMAKU SHOOTER', cx, ly + 58);
 
-    // High score
+    // High score (a blinking "tap to start" prompt used to sit here; the start
+    // button below is the single call to action, so the duplicate was removed).
     ctx.font = `600 12px ${MONO}`;
     ctx.fillStyle = 'rgba(214,236,255,0.55)';
-    ctx.fillText(`HIGH ${formatScore(g.highScore)}`, cx, h * 0.44);
-
-    // Blinking prompt
-    const blink = 0.55 + 0.45 * Math.sin(t * 3.4);
-    ctx.globalAlpha = blink;
-    ctx.font = `800 17px ${FONT}`;
-    ctx.fillStyle = '#ffe066';
-    ctx.fillText('タップしてスタート', cx, h * 0.485);
-    ctx.globalAlpha = 1;
+    ctx.fillText(`HIGH ${formatScore(g.highScore)}`, cx, h * 0.46);
 
     // Instructions
     const iy = h * 0.72;
@@ -536,8 +533,10 @@ export class UI {
           ctx.font = `700 15px ${FONT}`;
           ctx.fillText(on ? '♪' : '✕', b.x + b.w / 2, b.y + b.h / 2);
         } else if (b.id === 'pause') {
-          ctx.fillRect(b.x + 12, b.y + 10, 4, 18);
-          ctx.fillRect(b.x + 22, b.y + 10, 4, 18);
+          const bx = b.x + b.w / 2 - 7;
+          const by = b.y + b.h / 2 - 9;
+          ctx.fillRect(bx, by, 4, 18);
+          ctx.fillRect(bx + 10, by, 4, 18);
         }
         ctx.restore();
         continue;
