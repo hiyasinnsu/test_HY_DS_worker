@@ -66,7 +66,7 @@ export class UI {
     const h = this.h;
     const cx = w / 2;
     const buttons = [];
-    const bottom = h - 26 - (this.game.safeBottom || 0);
+    const bottom = h - 26;
 
     if (state === 'title') {
       buttons.push(btn('start', w * 0.14, h * 0.56, w * 0.72, 62, 'ゲームスタート', 'primary'));
@@ -119,8 +119,10 @@ export class UI {
     const g = this.game;
     const w = this.w;
     const h = this.h;
-    const safeLeft = 14 + (g.safeLeft || 0);
-    const safeTop = 14 + (g.safeTop || 0);
+    // #stage already applies env(safe-area-inset-*) padding, so the canvas box
+    // itself never sits under a notch or the home indicator.
+    const safeLeft = 14;
+    const safeTop = 14;
 
     ctx.save();
     ctx.textBaseline = 'top';
@@ -151,7 +153,7 @@ export class UI {
 
     // Lives & bombs sit in the bottom centre so the round BOMB button in the
     // left corner never covers them (an overlap visible in the screenshots).
-    const ly = h - 24 - (g.safeBottom || 0);
+    const ly = h - 24;
     const lifeRowW = PLAYER.lives * 17;
     const bombRowW = PLAYER.bombs * 16;
     ctx.textAlign = 'left';
@@ -174,7 +176,7 @@ export class UI {
     // Power meter bottom-right
     const pw = 92;
     const px = w - safeLeft - pw;
-    const py = h - 30 - (g.safeBottom || 0);
+    const py = h - 30;
     ctx.textAlign = 'right';
     ctx.font = `700 10px ${MONO}`;
     ctx.fillStyle = COLORS.dim;
@@ -364,7 +366,7 @@ export class UI {
 
     ctx.font = `600 10px ${MONO}`;
     ctx.fillStyle = 'rgba(214,236,255,0.35)';
-    ctx.fillText('KEYBOARD: ARROWS / SHIFT=SLOW / X=BOMB / P=PAUSE', cx, h - 18 - (g.safeBottom || 0));
+    ctx.fillText('KEYBOARD: ARROWS / SHIFT=SLOW / X=BOMB / P=PAUSE', cx, h - 18);
 
     ctx.restore();
     this._drawButtons(ctx);

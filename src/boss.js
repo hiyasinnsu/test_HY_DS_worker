@@ -199,8 +199,11 @@ export class Boss {
   _startPhase(index) {
     this.phaseIndex = index;
     const phase = this.phase;
-    const base = this.game.stage * 1.15 + this.difficulty * 220;
-    this.maxHp = Math.round(2600 * phase.hp + base * phase.hp * 3);
+    // Tuned with tests/balance.mjs: a power-2 player parked at the bottom of the
+    // screen (imperfect alignment included) clears a phase in ~15-25s, well
+    // inside its timer, while a power-4 player still gets a shorter fight.
+    const stageScale = 1 + (this.game.stage - 1) * 0.22;
+    this.maxHp = Math.round(1550 * phase.hp * stageScale);
     this.hp = this.maxHp;
     this.timeLimit = phase.time;
     this.phaseTime = phase.time;

@@ -76,9 +76,6 @@ export class Game {
     this.difficulty = 1;
     this.pending = [];
     this.gameoverTimer = 0;
-    this.safeLeft = 0;
-    this.safeTop = 0;
-    this.safeBottom = 0;
     this.stats = { graze: 0, kills: 0, hits: 0, bombs: 0 };
     this._drag = { active: false, lastX: 0, lastY: 0, totalMove: 0 };
     this._lastTs = 0;
