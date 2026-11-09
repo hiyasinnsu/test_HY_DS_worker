@@ -26,8 +26,11 @@
 - ゲーム本体一式（`src/` 21 モジュール）を実装。
 - ヘッドレス検証系を整備: `tests/headless-sim.mjs`（32 チェック）、`tests/render-shots.mjs`（12 PNG）、`tests/smoke.mjs`（実ブラウザ用）、`tests/static-check.mjs`。
 - スクリーンショット目視で HUD 重なり（LIFE/BOMB と BOMB ボタン、ボス名と SCORE）を発見し修正。
-- PWA（manifest + Service Worker）対応。
+- PWA（manifest + Service Worker、network-first でキャッシュ不整合を回避）対応。
+- 難易度調整: `tests/balance.mjs`（ボスを狙って追従する想定プレイヤー）で計測し、
+  パワー2で各フェーズ 22〜34 秒、パワー4で 7〜10 秒に収まるようボス HP を再調整。
 - GitHub Pages 公開（main ブランチ / root）。
+- 公開サイトを `tests/live-check.mjs` で照合（26 ファイルのバイト一致 + MIME 型 + 相対パス）。
 
 ## 未解決事項・次の作業
 

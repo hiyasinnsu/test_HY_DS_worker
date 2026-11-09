@@ -55,6 +55,7 @@ npm test                       # static-check + headless-sim + dom-boot（ブラ
 npm run test:browser           # 実ブラウザ（Chrome/Edge + puppeteer-core）でのスモークテスト
 npm run test:live              # 公開中の GitHub Pages がローカル検証版と一致するか確認
 npm run shots                  # 実 Canvas 実装で PNG を書き出す（要 @napi-rs/canvas）
+node tests/balance.mjs         # ボスの HP を難易度別に計測（パワー1〜4で各フェーズ何秒か）
 ```
 
 `tests/headless-sim.mjs` は Canvas API をスタブ化しつつ、NaN 座標や存在しない描画メソッド呼び出しを例外にします。実ブラウザを起動できない環境でも、ロジックと描画呼び出しの破綻を検出できます。
