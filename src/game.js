@@ -439,7 +439,6 @@ export class Game {
     this.displayScore = 0;
     this.stage = 1;
     this.stats = { graze: 0, kills: 0, hits: 0, bombs: 0 };
-    this._titleTime = 0;
   }
 
   startNewGame() {
@@ -597,7 +596,6 @@ export class Game {
     this.audio.startMusic('boss');
     this.ui.bossIntro(this.boss.phase.name);
     this.ui.message('', 0);
-    this._bossPhaseToast = true;
   }
 
   onBossPhase(boss) {

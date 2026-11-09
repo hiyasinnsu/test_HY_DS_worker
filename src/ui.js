@@ -18,7 +18,6 @@ export class UI {
   constructor(game) {
     this.game = game;
     this.buttons = [];
-    this.flashTime = 0;
     this.toast = '';
     this.toastTime = 0;
     this.titleGlow = 0;
