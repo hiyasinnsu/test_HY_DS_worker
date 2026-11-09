@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="72%">
+      <stop offset="0" stop-color="#10203f"/>
+      <stop offset="0.65" stop-color="#0a0a1c"/>
+      <stop offset="1" stop-color="#04040c"/>
+    </radialGradient>
+    <radialGradient id="pink" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.35" stop-color="#ff4f9a"/>
+      <stop offset="1" stop-color="#ff4f9a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cyan" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.35" stop-color="#43e8ff"/>
+      <stop offset="1" stop-color="#43e8ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <g fill="none" stroke="#43e8ff" stroke-opacity="0.22" stroke-width="3">
+    <circle cx="256" cy="256" r="150"/>
+    <circle cx="256" cy="256" r="208"/>
+  </g>
+  <g>
+    <circle cx="256" cy="120" r="30" fill="url(#cyan)"/>
+    <circle cx="370" cy="212" r="30" fill="url(#pink)"/>
+    <circle cx="330" cy="356" r="30" fill="url(#cyan)"/>
+    <circle cx="182" cy="356" r="30" fill="url(#pink)"/>
+    <circle cx="142" cy="212" r="30" fill="url(#cyan)"/>
+  </g>
+  <path d="M256 300 L292 380 L256 362 L220 380 Z" fill="#eaf8ff"/>
+  <circle cx="256" cy="330" r="9" fill="#ff3355"/>
+</svg>

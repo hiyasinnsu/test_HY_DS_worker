@@ -1,0 +1,19 @@
+{
+  "name": "NEON BARRAGE — 弾幕シューティング",
+  "short_name": "NEON BARRAGE",
+  "description": "スマホのブラウザで遊べる弾幕シューティング。ドラッグで避けて自動射撃。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#05040c",
+  "theme_color": "#05040c",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

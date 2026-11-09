@@ -1,0 +1,15 @@
+{
+  "name": "neon-barrage",
+  "version": "1.0.0",
+  "private": true,
+  "description": "スマホのブラウザで遊べる弾幕シューティング (vanilla JS / Canvas 2D, GitHub Pages)",
+  "type": "module",
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "test": "node tests/smoke.mjs",
+    "check": "node tests/static-check.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  }
+}
