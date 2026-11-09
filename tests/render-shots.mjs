@@ -163,16 +163,19 @@ async function main() {
   step(game, 5);
   await save(dom.canvas, '10-settings');
 
+  // 9b. Landscape gameplay (not an overlay screen, so the HUD is inspected).
   dom.setSize(844, 390);
   game.viewport.measure();
   game.closeSettings();
-  step(game, 20);
+  game.startNewGame();
+  game.player.invuln = 1e9;
+  step(game, 60 * 14);
   await save(dom.canvas, '11-landscape');
 
-  // 10. Tablet portrait
+  // 10. Tablet portrait gameplay
   dom.setSize(820, 1180);
   game.viewport.measure();
-  step(game, 20);
+  step(game, 120);
   await save(dom.canvas, '12-tablet');
 
   console.log('done');

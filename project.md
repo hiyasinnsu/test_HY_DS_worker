@@ -32,9 +32,19 @@
 - GitHub Pages 公開（main ブランチ / root）。
 - 公開サイトを `tests/live-check.mjs` で照合（26 ファイルのバイト一致 + MIME 型 + 相対パス）。
 
+## 検証結果（2026-11-10）
+
+- `tests/static-check.mjs`: OK（21 モジュール、import/export 整合、Service Worker のプリキャッシュ同期、localhost 直書きなし）
+- `tests/headless-sim.mjs`: 34/34 PASS（タッチ相対ドラッグ、自動射撃、ステージ進行、ボス 4 フェーズ、ポーズ、ボム、ゲームオーバー、リトライ、設定、自動画質、1200 弾で 0.07ms/frame）
+- `tests/dom-boot.mjs`: 9/9 PASS（jsdom で index.html から main.js を起動、実フレーム描画、window エラーなし）
+- `tests/balance.mjs`: パワー2 で各フェーズ 22〜34 秒、パワー4 で 7〜10 秒で撃破
+- `tests/render-shots.mjs`: 12 枚の PNG を目視確認（HUD 重なり 3 件を発見・修正済み）
+- `tests/live-check.mjs`: 公開サイトの 26 ファイルがローカル検証版とバイト一致、MIME も正しい
+
 ## 未解決事項・次の作業
 
-- 実機（iOS Safari / Android Chrome）でのタッチ追従感と fps は未計測。`tests/smoke.mjs` を手元の Chrome/Edge で実行すれば計測できる。
+- 実機（iOS Safari / Android Chrome）でのタッチ追従感と fps は未計測。サンドボックスがブラウザ起動を拒否するため `tests/smoke.mjs`（実ブラウザ用、15 項目）は未実行。手元の Chrome/Edge で `npm run test:browser` を実行すれば計測できる。
+- 横向き（ランドスケープ）はレターボックスで中央に細い縦長フィールドになる。プレイ可能だが画面の余白は大きい。
 - BGM は 4 小節ループの合成音。ステージごとの曲調変化は未実装（ボス戦のみテンポと音色が変わる）。
 - ステージは 3 面想定の難易度カーブだが、ボスは全ステージ同一パターン（HP と発射間隔のみスケール）。
 
